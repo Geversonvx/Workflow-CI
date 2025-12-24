@@ -24,10 +24,25 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    # =========================
+    # Set DagsHub Credentials
+    # =========================
+    - name: Set DagsHub credentials
+      run: |
+        echo "MLFLOW_TRACKING_URI=https://dagshub.com/Geversonvx/Eksperimen_SML_GilangPutraFirmansyah.mlflow" >> $GITHUB_ENV
+        echo "MLFLOW_TRACKING_USERNAME=${{ secrets.DAGSHUB_USERNAME }}" >> $GITHUB_ENV
+        echo "MLFLOW_TRACKING_PASSWORD=${{ secrets.DAGSHUB_TOKEN }}" >> $GITHUB_ENV
+
+    # =========================
+    # Run preprocessing
+    # =========================
     - name: Run preprocessing
       run: |
         python preprocessing/automate_gilangputrafirmansyah.py
 
+    # =========================
+    # Train & register model
+    # =========================
     - name: Run model training
       run: |
         python preprocessing/Membangun_model/modelling_final.py
