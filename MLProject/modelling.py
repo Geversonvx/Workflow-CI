@@ -15,13 +15,13 @@ def main():
         # Load dataset
         # =========================
         try:
-            X_train = pd.read_csv("CreditCardDefaultDataset_preprocessing/X_train.csv")
-            X_test = pd.read_csv("CreditCardDefaultDataset_preprocessing/X_test.csv")
+            X_train = pd.read_csv("MLProject/CreditCardDefaultDataset_preprocessing/X_train.csv")
+            X_test = pd.read_csv("MLProject/CreditCardDefaultDataset_preprocessing/X_test.csv")
             y_train = pd.read_csv(
-                "CreditCardDefaultDataset_preprocessing/y_train.csv"
+                "MLProject/CreditCardDefaultDataset_preprocessing/y_train.csv"
             ).values.ravel()
             y_test = pd.read_csv(
-                "CreditCardDefaultDataset_preprocessing/y_test.csv"
+                "MLProject/CreditCardDefaultDataset_preprocessing/y_test.csv"
             ).values.ravel()
         except FileNotFoundError:
             print("❌ Dataset preprocessing tidak ditemukan.")
