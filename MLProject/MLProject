@@ -1,7 +1,7 @@
-name: credit-card-default
+name: Credit_Card_Default_CI
 
 conda_env: conda.yaml
 
 entry_points:
   main:
-    command: "python modelling_final.py"
+    command: "python modelling.py"
