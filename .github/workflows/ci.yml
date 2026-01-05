@@ -34,3 +34,20 @@ jobs:
           MLFLOW_TRACKING_URI: file:${{ github.workspace }}/MLProject/mlruns
         run: |
           mlflow run MLProject --env-manager=local
+      - name: Login to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login \
+            -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Build Docker Image from MLflow Model
+        run: |
+          MODEL_PATH=$(ls -d MLProject/mlruns/0/models/* | head -n 1)
+
+          mlflow models build-docker \
+            -m $MODEL_PATH \
+            -n ${{ secrets.DOCKERHUB_USERNAME }}/mlflow-credit-model \
+            --enable-mlserver
+
+      - name: Push Docker Image to Docker Hub
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/mlflow-credit-model:latest
