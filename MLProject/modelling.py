@@ -7,6 +7,9 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 
 def main():
+    mlflow.set_experiment("creditcard-default")
+    
+    with mlflow.start_run():
     # =========================
     # Load dataset
     # =========================
