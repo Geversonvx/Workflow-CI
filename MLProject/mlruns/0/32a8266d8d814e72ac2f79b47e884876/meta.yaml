@@ -1,0 +1,14 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/MLProject/mlruns/0/32a8266d8d814e72ac2f79b47e884876/artifacts
+end_time: 1767626248598
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 32a8266d8d814e72ac2f79b47e884876
+run_name: indecisive-bat-184
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1767626241926
+status: 3
+tags: []
+user_id: runner
