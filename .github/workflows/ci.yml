@@ -1,11 +1,11 @@
-name: MLflow CI with Docker
+name: MLflow Docker CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
-  train-and-build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,37 +19,24 @@ jobs:
 
     - name: Install dependencies
       run: |
+        pip install --upgrade pip
         pip install -r requirements.txt
-        pip install mlflow scikit-learn
 
-    # =========================
-    # 1. TRAIN MODEL (MLflow)
-    # =========================
-    - name: Run MLflow Project
+    - name: Run training (MLflow)
       run: |
-        mlflow run MLProject --env-manager=local
+        mlflow run . --env-manager=local
 
-    # =========================
-    # 2. LOGIN DOCKER HUB
-    # =========================
     - name: Login to Docker Hub
       run: |
         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login \
           -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-    # =========================
-    # 3. BUILD DOCKER IMAGE
-    # =========================
     - name: Build Docker image from MLflow model
       run: |
-        MODEL_PATH=$(ls -d MLProject/mlruns/0/models/*/artifacts | head -n 1)
         mlflow models build-docker \
-          -m $MODEL_PATH \
-          -n ${{ secrets.DOCKERHUB_USERNAME }}/creditcard-mlflow-model
+          -m runs:/$(ls mlruns/0 | head -n 1)/model \
+          -n ${{ secrets.DOCKERHUB_USERNAME }}/creditcard-mlflow
 
-    # =========================
-    # 4. PUSH DOCKER IMAGE
-    # =========================
     - name: Push Docker image
       run: |
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/creditcard-mlflow-model
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/creditcard-mlflow
