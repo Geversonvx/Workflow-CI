@@ -8,11 +8,6 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 def main():
     # =========================
-    # Set experiment (AMAN)
-    # =========================
-    mlflow.set_experiment("Credit_Card_Default_CI")
-
-    # =========================
     # Load dataset
     # =========================
     try:
@@ -49,7 +44,7 @@ def main():
     f1 = f1_score(y_test, y_pred, zero_division=0)
 
     # =========================
-    # Logging (PASTI AMAN)
+    # Logging (AMAN)
     # =========================
     mlflow.log_param("model_type", "RandomForestClassifier")
     mlflow.log_param("n_estimators", 100)
