@@ -34,12 +34,3 @@ jobs:
           MLFLOW_TRACKING_URI: file:${{ github.workspace }}/MLProject/mlruns
         run: |
           mlflow run MLProject --env-manager=local
-
-      - name: Commit mlruns folder
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-
-          git add MLProject/mlruns || echo "No mlruns to add"
-          git commit -m "Add MLflow CI training artifacts" || echo "No changes to commit"
-          git push
