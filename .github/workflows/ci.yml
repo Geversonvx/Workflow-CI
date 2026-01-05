@@ -2,8 +2,7 @@ name: MLflow CI Pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -11,36 +10,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repository
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # 2. Setup Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      # 3. Install dependencies
       - name: Install dependencies
         run: |
           pip install mlflow pandas scikit-learn
 
-      # 4. Run MLflow Project
       - name: Run MLflow Project
+        env:
+          MLFLOW_TRACKING_URI: file:${{ github.workspace }}/MLProject/mlruns
         run: |
           mlflow run MLProject --env-manager=local
 
-      # 5. Commit MLflow artifacts (mlruns)
-      - name: Commit mlruns folder
+      - name: Commit MLflow artifacts
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
           if [ -d "MLProject/mlruns" ]; then
             git add MLProject/mlruns
-            git commit -m "Add MLflow CI training artifacts" || echo "No changes to commit"
+            git commit -m "Add MLflow CI training artifacts" || echo "No changes"
             git push
-          else
-            echo "No mlruns directory found"
           fi
