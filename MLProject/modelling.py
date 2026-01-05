@@ -8,7 +8,12 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 def main():
     # =========================
-    # Load dataset preprocessing
+    # Set experiment
+    # =========================
+    mlflow.set_experiment("Credit_Card_Default_CI")
+
+    # =========================
+    # Load dataset
     # =========================
     try:
         X_train = pd.read_csv("CreditCardDefaultDataset_preprocessing/X_train.csv")
@@ -20,9 +25,8 @@ def main():
             "CreditCardDefaultDataset_preprocessing/y_test.csv"
         ).values.ravel()
     except FileNotFoundError:
-        raise FileNotFoundError(
-            "Dataset preprocessing tidak ditemukan. Pastikan path benar."
-        )
+        print("❌ Dataset preprocessing tidak ditemukan.")
+        return
 
     # =========================
     # Training
@@ -45,7 +49,7 @@ def main():
     f1 = f1_score(y_test, y_pred, zero_division=0)
 
     # =========================
-    # Manual logging (WAJIB)
+    # Logging ke MLflow
     # =========================
     mlflow.log_param("model_type", "RandomForestClassifier")
     mlflow.log_param("n_estimators", 100)
@@ -55,15 +59,15 @@ def main():
     mlflow.log_metric("recall", rec)
     mlflow.log_metric("f1_score", f1)
 
-    # =========================
-    # Log model
-    # =========================
     mlflow.sklearn.log_model(
         sk_model=model,
         artifact_path="model"
     )
 
-    print("✅ Training CI selesai")
+    # =========================
+    # Output terminal
+    # =========================
+    print("✅ Training selesai")
     print(f"Accuracy : {acc:.4f}")
     print(f"Precision: {prec:.4f}")
     print(f"Recall   : {rec:.4f}")
