@@ -14,32 +14,33 @@ jobs:
       # 1. Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       # 2. Setup Python
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: "3.10"
 
-      # 3. Install MLflow
-      - name: Install MLflow
+      # 3. Install dependencies
+      - name: Install dependencies
         run: |
-          pip install mlflow
+          pip install mlflow pandas scikit-learn
 
-      # 4. Run training as MLflow Project
+      # 4. Run MLflow Project
       - name: Run MLflow Project
-        working-directory: MLProject
         run: |
-          mlflow run . --env-manager=local -P data_path=CreditCardDefaultDataset_preprocessing/creditcard_preprocessed_full.csv
+          mlflow run MLProject --env-manager=local
 
-      # 5. Commit mlruns to repository
+      # 5. Commit MLflow artifacts (mlruns)
       - name: Commit mlruns folder
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-          git add MLProject/mlruns || echo "No mlruns to add"
-          git commit -m "Add MLflow Project training artifacts" || echo "No changes to commit"
-          git push
+          if [ -d "MLProject/mlruns" ]; then
+            git add MLProject/mlruns
+            git commit -m "Add MLflow CI training artifacts" || echo "No changes to commit"
+            git push
+          else
+            echo "No mlruns directory found"
+          fi
