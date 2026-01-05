@@ -33,10 +33,11 @@ jobs:
 
     - name: Build Docker image from MLflow model
       run: |
-        RUN_ID=$(ls mlruns/0 | head -n 1)
+        MODEL_PATH=$(ls -d mlruns/0/* | head -n 1)/artifacts/model
         mlflow models build-docker \
-          -m runs:/$RUN_ID/model \
+          -m $MODEL_PATH \
           -n ${{ secrets.DOCKERHUB_USERNAME }}/creditcard-mlflow
+
 
     - name: Push Docker image
       run: |
