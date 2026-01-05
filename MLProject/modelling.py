@@ -8,7 +8,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 def main():
     # =========================
-    # Set experiment
+    # Set experiment (AMAN)
     # =========================
     mlflow.set_experiment("Credit_Card_Default_CI")
 
@@ -49,7 +49,7 @@ def main():
     f1 = f1_score(y_test, y_pred, zero_division=0)
 
     # =========================
-    # Logging ke MLflow
+    # Logging (PASTI AMAN)
     # =========================
     mlflow.log_param("model_type", "RandomForestClassifier")
     mlflow.log_param("n_estimators", 100)
@@ -59,14 +59,8 @@ def main():
     mlflow.log_metric("recall", rec)
     mlflow.log_metric("f1_score", f1)
 
-    mlflow.sklearn.log_model(
-        sk_model=model,
-        artifact_path="model"
-    )
+    mlflow.sklearn.log_model(model, artifact_path="model")
 
-    # =========================
-    # Output terminal
-    # =========================
     print("✅ Training selesai")
     print(f"Accuracy : {acc:.4f}")
     print(f"Precision: {prec:.4f}")
