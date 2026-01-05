@@ -24,7 +24,7 @@ jobs:
 
     - name: Run training
       run: |
-        python modelling.py
+        python MLProject/modelling.py
 
     - name: Login to Docker Hub
       run: |
